@@ -7,7 +7,7 @@ var connectionString = builder.Configuration.GetConnectionString("WebBlogDbConte
 
 builder.Services.AddDbContext<WebBlogDbContext>(options => options.UseSqlServer(connectionString));
 
-builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<WebBlogDbContext>();
+builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<WebBlogDbContext>();
 
 builder.Services.AddRazorPages();
 // Add services to the container.
