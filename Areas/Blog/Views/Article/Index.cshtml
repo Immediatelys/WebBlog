@@ -5,12 +5,20 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h3>Tổng số bài viết : @ViewBag.totalPost</h3>
+
+<h1>Danh sách bài viết</h1>
+<form method="get" asp-action="Search" asp-controller="Article">
+    <label>Tìm kiếm</label>
+    <input name="Search" value="">
+    <button type="submit" class="btn btn-secondary ">Tìm</button>
+</form>
 
 
 <table class="table">
     <thead>
         <tr>
+            <th>STT</th>
             <th>
                 @Html.DisplayNameFor(model => model.Title)
             </th>
@@ -26,6 +34,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @(++ViewBag.postIndex)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
@@ -44,3 +55,5 @@
 }
     </tbody>
 </table>
+
+<partial name="_PagingPartial" model="@ViewBag.pagingModel"/>

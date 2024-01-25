@@ -16,6 +16,8 @@ namespace WebBlog.Areas.Blog.Controllers
     {
         private readonly WebBlogDbContext _context;
 
+        public IList<ArticleModel> Article { get; set; }
+
         public ArticleController(WebBlogDbContext context)
         {
             _context = context;
@@ -23,9 +25,44 @@ namespace WebBlog.Areas.Blog.Controllers
 
         // GET: Article
         [Route("/blog/home")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery(Name = "p")] int currentpage, int pageSize)
         {
-            return View(await _context.Articles.ToListAsync());
+            var posts = _context.Articles;
+
+            int totalPost = await posts.CountAsync();
+
+            if (pageSize <= 0) pageSize = 10;
+
+            int countPage = (int)Math.Ceiling((double)totalPost / pageSize);
+
+            if (currentpage > countPage)
+            {
+                currentpage = countPage;
+            }
+
+            if (currentpage < 1)
+            {
+                currentpage = 1;
+            }
+
+            var pagingModel = new PagingModel()
+            {
+                countpages = countPage,
+                currentpage = currentpage,
+                generateUrl = (pageNumber) => Url.Action("Index", new
+                {
+                    p = pageNumber,
+                    pageSize
+                })
+            };
+
+            ViewBag.PagingModel = pagingModel;
+            ViewBag.totalPost = totalPost;
+            ViewBag.postIndex = (currentpage - 1) * pageSize;
+
+            var postInPage = await posts.Skip((currentpage - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            return View(postInPage);
         }
 
         // GET: Article/Details/5
@@ -158,6 +195,24 @@ namespace WebBlog.Areas.Blog.Controllers
         private bool ArticleModelExists(int id)
         {
             return _context.Articles.Any(e => e.Id == id);
+        }
+
+
+        [Route("/blog/search/{SearchString}", Name = "Search")]
+        public async Task Search(string SearchString)
+        {
+            var qr = from a in _context.Articles
+                     orderby a.Title
+                     select a;
+
+            if (!string.IsNullOrEmpty(SearchString))
+            {
+                Article = qr.Where(a => a.Title.Contains(SearchString)).ToList();
+            }
+            else
+            {
+                Article = await qr.ToListAsync();
+            }
         }
     }
 }
