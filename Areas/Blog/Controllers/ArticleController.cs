@@ -23,9 +23,27 @@ namespace WebBlog.Areas.Blog.Controllers
             _context = context;
         }
 
+        //    [Route("/blog/home/{SearchString}")]
+        // public async Task<IActionResult> Index(string SearchString)
+        // {
+        //     var qr = from a in _context.Articles
+        //              select a;
+
+        //     if (!string.IsNullOrEmpty(SearchString))
+        //     {
+        //         Article = await qr.Where(a => a.Title.Contains(SearchString)).ToListAsync();
+        //     }
+        //     else
+        //     {
+        //         Article = await qr.ToListAsync();
+        //     }
+
+        //     return View(Article);
+        // }
+
         // GET: Article
-        [Route("/blog/home")]
-        public async Task<IActionResult> Index([FromQuery(Name = "p")] int currentpage, int pageSize)
+        [Route("/blog/home/{SearchString?}")]
+        public async Task<IActionResult> Index([FromQuery(Name = "p")] int currentpage, int pageSize, string? SearchString)
         {
             var posts = _context.Articles;
 
@@ -60,9 +78,27 @@ namespace WebBlog.Areas.Blog.Controllers
             ViewBag.totalPost = totalPost;
             ViewBag.postIndex = (currentpage - 1) * pageSize;
 
+
+
+            var qr = from a in _context.Articles
+                     select a;
+
+
             var postInPage = await posts.Skip((currentpage - 1) * pageSize).Take(pageSize).ToListAsync();
 
-            return View(postInPage);
+            if (!string.IsNullOrEmpty(SearchString))
+            {
+                Article = await qr.Where(a => a.Title.Contains(SearchString)).ToListAsync();
+                return View(Article);
+            }
+            else
+            {
+                return View(postInPage);
+            }
+
+
+
+
         }
 
         // GET: Article/Details/5
@@ -198,21 +234,5 @@ namespace WebBlog.Areas.Blog.Controllers
         }
 
 
-        [Route("/blog/search/{SearchString}", Name = "Search")]
-        public async Task Search(string SearchString)
-        {
-            var qr = from a in _context.Articles
-                     orderby a.Title
-                     select a;
-
-            if (!string.IsNullOrEmpty(SearchString))
-            {
-                Article = qr.Where(a => a.Title.Contains(SearchString)).ToList();
-            }
-            else
-            {
-                Article = await qr.ToListAsync();
-            }
-        }
     }
 }
