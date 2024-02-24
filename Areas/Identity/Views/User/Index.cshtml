@@ -1,0 +1,35 @@
+﻿
+@using WebBlog.Areas.Identity.Models;
+@model UserListModel
+
+@{
+    ViewData["Title"] = "Danh sách tài khoản";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<p>Tổng số thành viên: @Model.totalUsers</p>
+
+<table class="table">
+    <tr>
+        <th>Tên user</th>
+        <th>Vai trò (role)</th>
+        <th>Tác vụ</th>
+    </tr>
+    @foreach (var user in Model.users)
+    {
+        <tr>
+            <td>@user.UserName</td>
+        </tr>
+    }
+</table>
+
+@{
+    var pagingmodel = new WebBlog.Models.PagingModel()
+            {
+                currentpage = Model.currentPage,
+                countpages = Model.countPages,
+                generateUrl = (int? p) => Url.Action("Index", new { p = p })
+            };
+}
+
+<partial name="_PagingPartial" model="@pagingmodel" />

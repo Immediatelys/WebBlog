@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\Blog\Models\" />
-    <Folder Include="Areas\Identity\Controllers\" />
   </ItemGroup>
 
 </Project>
