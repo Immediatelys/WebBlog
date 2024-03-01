@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using WebBlog.Areas.Identity.Data;
 
-namespace WebBlog.Areas.Identity.Pages.Account
+namespace WebBlog.Areas.Identity.Models.Account
 {
     public class LogoutModel : PageModel
     {
