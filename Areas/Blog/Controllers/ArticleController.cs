@@ -23,26 +23,10 @@ namespace WebBlog.Areas.Blog.Controllers
             _context = context;
         }
 
-        //    [Route("/blog/home/{SearchString}")]
-        // public async Task<IActionResult> Index(string SearchString)
-        // {
-        //     var qr = from a in _context.Articles
-        //              select a;
 
-        //     if (!string.IsNullOrEmpty(SearchString))
-        //     {
-        //         Article = await qr.Where(a => a.Title.Contains(SearchString)).ToListAsync();
-        //     }
-        //     else
-        //     {
-        //         Article = await qr.ToListAsync();
-        //     }
-
-        //     return View(Article);
-        // }
 
         // GET: Article
-        [Route("/blog/home/{SearchString?}")]
+        [HttpGet("/blog/home/{SearchString?}")]
         public async Task<IActionResult> Index([FromQuery(Name = "p")] int currentpage, int pageSize, string? SearchString)
         {
             var posts = _context.Articles;
@@ -102,6 +86,7 @@ namespace WebBlog.Areas.Blog.Controllers
         }
 
         // GET: Article/Details/5
+        [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -120,7 +105,7 @@ namespace WebBlog.Areas.Blog.Controllers
         }
 
         // GET: Article/Create
-        [Route("/blog/create")]
+        [HttpGet("/blog/create")]
         public IActionResult Create()
         {
             return View();
@@ -143,7 +128,7 @@ namespace WebBlog.Areas.Blog.Controllers
         }
 
         // GET: Article/Edit/5
-        [Route("/blog/edit/{id}")]
+        [HttpPost("/blog/edit/{id}")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -195,7 +180,7 @@ namespace WebBlog.Areas.Blog.Controllers
         }
 
         // GET: Article/Delete/5
-        [Route("/blog/delete")]
+        [HttpDelete("/blog/delete")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

@@ -11,7 +11,7 @@
 }
 <style>
     .bg-login-image {
-        background-image: url(https://xuanthulab.net/public/img/logo.png);
+        background-image: url(https://haviweb.com.vn/wp-content/uploads/2018/11/web-2.0-la-gi.png);
         background-position: center;
         background-repeat: no-repeat;
         background-size: contain;
@@ -37,63 +37,33 @@
                             <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post"  class="user">
                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <div class="form-group">
-                                    <input asp-for="UserName" class="form-control form-control-user" />
-                                    <span asp-validation-for="UserName" class="text-danger"></span>
+                                    <input asp-for="UserNameOrEmail" class="form-control form-control-user" />
+                                    <span asp-validation-for="UserNameOrEmail" class="text-danger"></span>
                                 </div>
+                                <hr>
                                 <div class="form-group">
                                     <input asp-for="Password" class="form-control form-control-user" />
                                     <span asp-validation-for="Password" class="text-danger"></span>
                                 </div>
 
-
-                              
+                                <hr />
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox small">
+                                        <input asp-for="RememberMe" class="custom-control-input">
+                                        <label class="custom-control-label" asp-for="RememberMe">
+                                            @Html.DisplayNameFor(m => m.RememberMe)
+                                        </label>
+                                    </div>
+                                </div>
+                                <br>
                                 <button type="submit" class="btn btn-primary btn-user btn-block">Đăng nhập</button>
                                 <hr>
- 
-
-                                @{
-                                    var schemes = await SignInManager.GetExternalAuthenticationSchemesAsync();
-                                    var loginProviders = schemes.ToList();
-                                    if (loginProviders.Count == 0)
-                                    { 
-                                    }
-                                    else
-                                    {
-                                        <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
-                                            <div>
-                                                <p>
-                                                    @foreach (var provider in loginProviders)
-                                                    {
-                                                        var cssClass = "btn btn-user btn-block";
-                                                        var icon = "";
-                                                        if (provider.Name == "Google")
-                                                        {
-                                                            cssClass = "btn btn-google btn-user btn-block";
-                                                            icon = "<i class=\"fab fa-google\"></i>";
-                                                        }
-                                                        else if (provider.Name == "Facebook")
-                                                        {
-                                                            cssClass = "btn btn-facebook btn-user btn-block";
-                                                            icon = "<i class=\"fab fa-facebook\"></i>";
-                                                        }
-                                                        <button type="submit" class="@cssClass" 
-                                                            name="provider" value="@provider.Name" 
-                                                            title="Log in using your @provider.Name account">
-                                                            @Html.Raw(icon) @provider.Name
-                                                        </button>
-                                                    }
-                                                </p>
-                                            </div>
-                                        </form>
-                                    }
-                                }
-
-
                             </form>
                             <hr>
-                            
+
                             <div class="text-center">
-                                <a class="small" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">Chưa có tài khoản? Đăng ký</a>
+                                <h6>Chưa có tài khoản?</h6>
+                                <a class="small" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]"> Đăng ký</a>
                             </div>
            
 

@@ -8,7 +8,7 @@
 }
 <style>
     .bg-register-image {
-        background-image: url(https://xuanthulab.net/public/img/logo.png);
+        background-image: url(https://haviweb.com.vn/wp-content/uploads/2018/11/web-2.0-la-gi.png);
         background-position: center;
         background-repeat: no-repeat;
         background-size: contain;
@@ -26,51 +26,56 @@
                     <div class="text-center">
                         <h1 class="h4 text-gray-900 mb-4">Tạo tài khoản mới</h1>
                     </div>
-                    <form asp-controller="Account" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="user">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <form asp-area="Identity" asp-controller="Account" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="user">
+                        @* <div asp-validation-summary="ModelOnly" class="text-danger"></div> *@
 
                         <div class="form-group">
-                            <input asp-for="UserName" class="form-control form-control-user" />
-                            <span asp-validation-for="UserName" class="text-danger"></span>
+                            <label asp-for="@Model.UserName"></label>
+                            <input asp-for="@Model.UserName" type="text" class="form-control form-control-user" />
+                            <span asp-validation-for="@Model.UserName" class="text-danger"></span>
                         </div>
+                        <hr>
                         <div class="form-group">
-                            <input asp-for="Email" class="form-control form-control-user" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <label asp-for="@Model.Email"></label>
+                            <input asp-for="@Model.Email. type="email" class="form-control form-control-user" />
+                            <span asp-validation-for="@Model.Email" class="text-danger"></span>
                         </div>
-
-                        <div class="form-group">
-                            <input asp-for="Age" class="form-control form-control-user" />
-                            <span asp-validation-for="Age" class="text-danger"></span>
+                        <hr>
+                         <div class="form-group">
+                            <label asp-for="@Model.HomeAdress"></label>
+                            <input asp-for="@Model.HomeAdress. type="text" class="form-control form-control-user" />
+                            <span asp-validation-for="@Model.HomeAdress" class="text-danger"></span>
                         </div>
-
-
-                       
-
-
-                        <div class="form-group row">
+                        <hr>
+                      @*   <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                <input asp-for="Password" class="form-control form-control-user">
-                                <span asp-validation-for="Password" class="text-danger"></span>
-
-                                <label for="gender">Giới tính:</label><br>
-                                <select id="gender" name="gender" required>
-                                    <option value="Nam">Nam</option>
+                                
+                                <label asp-for="@Model.Sex">Giới tính:</label><br>
+                                <select asp-for="Sex" id="gender" name="gender" required>
+                                    <option asp-validation-for="Nam" value="Nam">Nam</option>
                                     <option value="Nữ">Nữ</option>
-                                    <option value="Khác">Khác</option>
                                 </select></br>
                             </div>
-                          
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-user btn-block">Đăng ký</button>
+                        </div> *@
+                        <hr>  
+                        <div class="form-group">
+                            <label asp-for="@Model.Age">Tuổi</label>
+                            <input asp-for="Age" class="form-control form-control-user" />
+                            <span asp-validation-for="Age" class="text-danger"></span>
+                        </div> 
                         <hr>
+                        <div class="form-group">
+                            <label asp-for="@Model.Password"></label>
+                            <input asp-for="@Model.Password" type="password" class="form-control form-control-user">
+                            <span asp-validation-for="@Model.Password" class="text-danger"></span>
+                        </div>
+                        <hr>
+                        <button asp-controller="Account" asp-action="Register" type="submit" class="btn btn-primary btn-user btn-block">Đăng ký</button>
                     </form>
-                    <hr>
-                   
+                    
                     <div class="text-center">
-                        <a class="small" asp-action="ForgotPassword">Quyên mật khẩu?</a>
-                    </div>
-                    <div class="text-center">
-                        <a class="small" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]">Đã có tài khoản? Đăng nhập</a>
+                        <h6>Đã có tài khoản?</h6>
+                        <a class="small" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]">Đăng nhập</a>
                     </div>
                 </div>
             </div>
@@ -79,6 +84,6 @@
 </div>
 
 
-@section Scripts {
+@* @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-}
+} *@

@@ -1,9 +1,11 @@
 ﻿using App.Areas.Identity.Models.AccountViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using WebBlog.Areas.Identity.Data;
+using WebBlog.Data;
 
 namespace WebBlog.Areas.Identity.Controllers
 {
@@ -16,13 +18,15 @@ namespace WebBlog.Areas.Identity.Controllers
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ILogger<AccountController> _logger;
 
+        private readonly WebBlogDbContext _context;
         private readonly IEmailSender _emailSender;
 
 
         public AccountController(
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            WebBlogDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -78,29 +82,48 @@ namespace WebBlog.Areas.Identity.Controllers
                 }*/
 
         [HttpPost("/account/login")]
-        public IActionResult Login(LoginViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
             ViewData["ReturnUrl"] = returnUrl;
 
+            if(!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            
+
             if (ModelState.IsValid)
             {
-                var result = _signInManager.PasswordSignInAsync(model.UserName, model.Password, true, false);
-                if (result.IsCompletedSuccessfully)
+                var result = await _signInManager.PasswordSignInAsync(model.UserNameOrEmail, model.Password, model.RememberMe, false);
+                if ((!result.Succeeded))
                 {
-                    return LocalRedirect(returnUrl);
+                    var user = await _userManager.FindByEmailAsync(model.UserNameOrEmail);
+                    if (user != null)
+                    {
+                        result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: true);
+                    }
                 }
 
-
-            }
+                if (result.Succeeded)
+                {
+                    return LocalRedirect(returnUrl);
+                } else
+                {
+                    _logger.LogWarning("2", "Login false");
+                }
+                
+            } 
             return View(model);
 
         }
 
-        [Route("/account/logout")]
-        public IActionResult Logout()
+        [HttpPost("/account/logout")]
+        public async Task<IActionResult> Logout()
         {
-            return RedirectToAction("Login");
+            await _signInManager.SignOutAsync();
+            _logger.LogInformation("User logout");
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet("/account/register")]
@@ -112,57 +135,38 @@ namespace WebBlog.Areas.Identity.Controllers
         }
 
         [HttpPost("/account/register")]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new AppUser { UserName = model.UserName, Email = model.Email };
+                var user = new AppUser { UserName = model.UserName, Email = model.Email, HomeAdress = model.HomeAdress, Password = model.Password, Age = model.Age };
+                /*var user = new AppUser { UserName = model.UserName, Email = model.Email, Password = model.Password  };*/
                 var result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("Đã tạo user mới.");
-
-                    // Phát sinh token để xác nhận email
-                    // var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    // code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-
-                    // // https://localhost:5001/confirm-email?userId=fdsfds&code=xyz&returnUrl=
-                    // var callbackUrl = Url.ActionLink(
-                    //     action: nameof(ConfirmEmail),
-                    //     values:
-                    //         new
-                    //         {
-                    //             area = "Identity",
-                    //             userId = user.Id,
-                    //             code = code
-                    //         },
-                    //     protocol: Request.Scheme);
-
-                    // await _emailSender.SendEmailAsync(model.Email,
-                    //     "Xác nhận địa chỉ email",
-                    //     @$"Bạn đã đăng ký tài khoản trên RazorWeb, 
-                    //        hãy <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>bấm vào đây</a> 
-                    //        để kích hoạt tài khoản.");
-
-                    /*   if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                       {
-                           return LocalRedirect(Url.Action(nameof(RegisterConfirmation)));
-                       }
-                       else
-                       {
-                           await _signInManager.SignInAsync(user, isPersistent: false);
-                           return LocalRedirect(returnUrl);
-                       }*/
-
+                   /* await _signInManager.SignInAsync(user, false);*/
+                    return RedirectToAction("Login");
+                }
+                else
+                {
+                    _logger.LogInformation("Register failed");
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
                 }
 
-                ModelState.AddModelError("Register Err", "Invalid user");
             }
-
-            // If we got this far, something failed, redisplay form
+            else
+            {
+                ModelState.AddModelError("Error", "Modelstate is not valid");
+            }
+            // Lỗi khi không tạo đc user hoặc dữ liệu không hợp lệ
             return View(model);
         }
 

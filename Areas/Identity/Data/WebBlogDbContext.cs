@@ -36,4 +36,5 @@ public class WebBlogDbContext : IdentityDbContext<AppUser>
     }
 
     public DbSet<ArticleModel> Articles { get; set; }
+
 }
