@@ -11,7 +11,7 @@ using WebBlog.Models;
 namespace WebBlog.Areas.Blog.Controllers
 {
     [Area("Blog")]
-    [Route("/blog")]
+    [Route("/blog/[action]")]
     public class ArticleController : Controller
     {
         private readonly WebBlogDbContext _context;
@@ -105,7 +105,7 @@ namespace WebBlog.Areas.Blog.Controllers
         }
 
         // GET: Article/Create
-        [HttpGet("/blog/create")]
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
@@ -128,7 +128,7 @@ namespace WebBlog.Areas.Blog.Controllers
         }
 
         // GET: Article/Edit/5
-        [HttpPost("/blog/edit/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -147,7 +147,7 @@ namespace WebBlog.Areas.Blog.Controllers
         // POST: Article/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Email,Content")] ArticleModel articleModel)
         {
@@ -180,7 +180,7 @@ namespace WebBlog.Areas.Blog.Controllers
         }
 
         // GET: Article/Delete/5
-        [HttpDelete("/blog/delete")]
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -199,9 +199,9 @@ namespace WebBlog.Areas.Blog.Controllers
         }
 
         // POST: Article/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var articleModel = await _context.Articles.FindAsync(id);
             if (articleModel != null)

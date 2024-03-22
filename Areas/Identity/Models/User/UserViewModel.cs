@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 
-namespace App.Areas.Identity.Models.UserViewModels;
+namespace WebBlog.Areas.Identity.Models.User;
 
 public class UserViewModel
 {

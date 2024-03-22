@@ -15,6 +15,9 @@ public class AppUser : IdentityUser
 
     public string HomeAdress { get; set; }
 
-    public string Password { get; set; }
+    public string EmailConfirmed { get; set; }
+
+    public int AccessFailedCount { get; set; }
+
 }
 

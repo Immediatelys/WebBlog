@@ -1,1 +1,31 @@
-﻿
+﻿@model List<RoleModel>
+@using WebBlog.Data
+@using WebBlog.Areas.Identity.Data
+@{
+    ViewData["Title"] = "Danh sách các role (vai trò)";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<partial name="_StatusMessage"></partial>
+
+
+<table class="table">
+    <tr>
+        <th>Tên role(vai trò)</th>
+        <th>Tác vụ</th>
+    </tr>
+    
+    @foreach(var role in Model)
+    {
+        <tr>
+            <td>@role.Name</td>
+            <td>
+                <a class="btn btn-success btn-sm" asp-action="Edit" asp-route-roleid="@role.Id">Cập nhật</a>
+                <a class="btn btn-success btn-sm" asp-action="Delete" asp-route-roleid="@role.Id">Xóa</a>
+            </td>
+        </tr>
+          
+    }
+
+    <a class="btn btn-primary" asp-action="SeedData">Seed Data</a>
+</table>

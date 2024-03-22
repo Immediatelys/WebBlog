@@ -9,15 +9,15 @@ namespace App.Areas.Identity.Models.AccountViewModels
     public class LoginViewModel
     {
         [Required(ErrorMessage = "Phải nhập {0}")]
-        [Display(Name = "Địa chỉ email hoặc tên tài khoản", Prompt = "Địa chỉ username")]
-        public string UserNameOrEmail { get; set; }
+        [Display(Name = "Địa chỉ email ", Prompt = "Địa chỉ Email")]
+        public string Email { get; set; }
 
+        /*public string Email { get; set; }*/
 
         [Required(ErrorMessage = "Phải nhập {0}")]
         [Display(Name = "Mật khẩu", Prompt = "Mật khẩu")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-
 
 
 

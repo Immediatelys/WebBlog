@@ -87,33 +87,44 @@ namespace WebBlog.Areas.Identity.Controllers
             returnUrl ??= Url.Content("~/");
             ViewData["ReturnUrl"] = returnUrl;
 
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(model);
             }
-            
+
 
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.UserNameOrEmail, model.Password, model.RememberMe, false);
-                if ((!result.Succeeded))
+                /*AppUser signInuser = _userManager.FindByEmailAsync(model.Email)*/
+                ;
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user != null)
                 {
-                    var user = await _userManager.FindByEmailAsync(model.UserNameOrEmail);
-                    if (user != null)
+                    var result = await _signInManager.PasswordSignInAsync(user.Email, model.Password, model.RememberMe, false);
+                    /* if ((!result.Succeeded))
+                     {
+                         var user = await _userManager.FindByEmailAsync(model.UserNameOrEmail);
+                         if (user != null)
+                         {
+                             result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: true);
+                         }
+                     }*/
+
+                    if (result.Succeeded)
                     {
-                        result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: true);
+                        return LocalRedirect(returnUrl);
+                    }
+                    else
+                    {
+                        _logger.LogWarning("2", "Login false");
                     }
                 }
-
-                if (result.Succeeded)
+                else
                 {
-                    return LocalRedirect(returnUrl);
-                } else
-                {
-                    _logger.LogWarning("2", "Login false");
+                    _logger.LogError("1", "user not valid");
                 }
-                
-            } 
+
+            }
             return View(model);
 
         }
@@ -142,14 +153,15 @@ namespace WebBlog.Areas.Identity.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new AppUser { UserName = model.UserName, Email = model.Email, HomeAdress = model.HomeAdress, Password = model.Password, Age = model.Age };
+                /* var user = new AppUser { UserName = model.UserName, Email = model.Email, HomeAdress = model.HomeAdress, PasswordHash = model.Password, Age = model.Age };*/
+                var user = new AppUser { UserName = model.UserName, Email = model.Email, HomeAdress = model.HomeAdress, Age = model.Age };
                 /*var user = new AppUser { UserName = model.UserName, Email = model.Email, Password = model.Password  };*/
                 var result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("Đã tạo user mới.");
-                   /* await _signInManager.SignInAsync(user, false);*/
+                    /* await _signInManager.SignInAsync(user, false);*/
                     return RedirectToAction("Login");
                 }
                 else

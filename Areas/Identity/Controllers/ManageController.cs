@@ -3,11 +3,11 @@
 namespace WebBlog.Areas.Identity.Controllers
 {
     [Area("Identity")]
-    [Route("/manage")]
+    [Route("/manage/[action]")]
     public class ManageController : Controller
     {
 
-        [HttpGet("/manage/index")]
+        [HttpGet()]
         public IActionResult Index()
         {
             return View();

@@ -1,5 +1,5 @@
-﻿
-@using WebBlog.Areas.Identity.Models;
+﻿@using WebBlog.Areas.Identity.Models;
+@using WebBlog.Areas.Identity.Models.User;
 @model UserListModel
 
 @{
@@ -19,6 +19,21 @@
     {
         <tr>
             <td>@user.UserName</td>
+            
+            <td>
+                @if(string.IsNullOrEmpty(user.rolesNames))
+                {
+                    <a class="text-class" asp-action="AddRole" asp-route-id="@user.Id">+ Add role</a>
+                } else
+                {
+                    <a asp-action="AddRole" asp-route-id="@user.Id">@user.rolesNames</a>
+                }
+            </td>
+            <td>
+                <a class="btn btn-info"  asp-action="DeleteAccount" asp-route-id="@user.Id">Delete Account</a>
+                <a class="btn btn-info" asp-action="AddRole" asp-route-id="@user.Id">Edit role</a>
+                <a class="btn btn-info"  asp-action="SetPassword" asp-route-id="@user.Id">Set Password</a>
+            </td>
         </tr>
     }
 </table>

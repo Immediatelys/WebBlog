@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using WebBlog.Areas.Identity.Data;
-namespace WebBlog.Areas.Identity.Models;
+namespace WebBlog.Areas.Identity.Models.User;
 
 public class UserListModel
 {
@@ -12,6 +12,8 @@ public class UserListModel
     public int currentPage { get; set; }
 
     public List<UserAndRole> users { get; set; }
+
+    public AppUser user { get; set; }
 
     public class UserAndRole : AppUser
     {
