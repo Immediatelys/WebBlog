@@ -100,7 +100,7 @@ namespace WebBlog.Areas.Identity.Controllers
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user != null)
                 {
-                    var result = await _signInManager.PasswordSignInAsync(user.Email, model.Password, model.RememberMe, false);
+                    var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, false);
                     /* if ((!result.Succeeded))
                      {
                          var user = await _userManager.FindByEmailAsync(model.UserNameOrEmail);
@@ -129,7 +129,7 @@ namespace WebBlog.Areas.Identity.Controllers
 
         }
 
-        [HttpPost("/account/logout")]
+        [HttpGet("/account/logout")]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();

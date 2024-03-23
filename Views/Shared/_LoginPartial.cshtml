@@ -42,14 +42,15 @@ else
     <form asp-area="Identity" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
             <li class="nav-item">
-                <a class="nav-link text-light" asp-area="Identity"  asp-controller="Manage" asp-action="Index" title="Manage">
+                <a class="btn btn-nav-link text-dark" asp-area="Identity"  asp-controller="Manage" asp-action="Index" title="Manage">
                     <i class="far fa-user"></i>
-                    @UserManager.GetUserName(User)!</a>
+                    @UserManager.GetUserName(User)</a>
             </li>
             <li class="nav-item">
-                <button title="Đăng xuất" type="submit" class="btn btn-link navbar-btn navbar-link text-light">
+                <a class="btn btn-nav-link text-dark " asp-area="Identity" asp-controller="Account" asp-action="Logout">
                     <i class="fas fa-sign-out-alt"></i>
-                </button>
+                    Đăng xuất 
+                </a>
             </li>
         </ul>
     </form>
@@ -58,10 +59,10 @@ else
 {
     <ul class="nav navbar-nav navbar-right">
         <li class="nav-item">
-            <a class="nav-link text-dark" id="register" asp-area="Identity" asp-controller="Account" asp-action="Login">Login</a>
-        </li>
+            <a class=" nav-link text-dark" id="register" asp-area="Identity" asp-controller="Account" asp-action="Login">Login</a>
+        </li>   
          <li class="nav-item">
-            <a class="nav-link text-dark" id="register" asp-area="Identity" asp-controller="Account" asp-action="Register">Register</a>
+            <a class=" nav-link text-dark" id="register" asp-area="Identity" asp-controller="Account" asp-action="Register">Register</a>
         </li>
     </ul>
 }
