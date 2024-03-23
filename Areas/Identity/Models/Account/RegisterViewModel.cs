@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace App.Areas.Identity.Models.AccountViewModels
 {
@@ -29,7 +30,7 @@ namespace App.Areas.Identity.Models.AccountViewModels
 
         /*[Required(ErrorMessage = "Phải nhập {0}")]*/
         /*[Display(Name = "Giới tính", Prompt = "Giới tính")]*/
-       /* public string Sex { get; set; }*/
+        /* public string Sex { get; set; }*/
 
 
         /*[Required(ErrorMessage = "Phải nhập {0}")]*/
@@ -40,6 +41,8 @@ namespace App.Areas.Identity.Models.AccountViewModels
 
 
         public string HomeAdress { get; set; }
+
+
 
 
 

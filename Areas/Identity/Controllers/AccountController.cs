@@ -158,9 +158,11 @@ namespace WebBlog.Areas.Identity.Controllers
                 /*var user = new AppUser { UserName = model.UserName, Email = model.Email, Password = model.Password  };*/
                 var result = await _userManager.CreateAsync(user, model.Password);
 
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("Đã tạo user mới.");
+                    _userManager.AddToRoleAsync(user, "Reader");
                     /* await _signInManager.SignInAsync(user, false);*/
                     return RedirectToAction("Login");
                 }

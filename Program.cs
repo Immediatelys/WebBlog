@@ -17,6 +17,8 @@ builder.Services.AddDbContext<WebBlogDbContext>(options => options.UseSqlServer(
 
 builder.Services.AddIdentity<AppUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<WebBlogDbContext>()
+    .AddUserManager<UserManager<AppUser>>()
+    .AddSignInManager<SignInManager<AppUser>>()
     .AddDefaultTokenProviders();
 
 builder.Services.Configure<IdentityOptions>(options =>

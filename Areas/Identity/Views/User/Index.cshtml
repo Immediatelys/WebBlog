@@ -9,6 +9,8 @@
 
 <p>Tổng số thành viên: @Model.totalUsers</p>
 
+
+
 <table class="table">
     <tr>
         <th>Tên user</th>
@@ -19,9 +21,10 @@
     {
         <tr>
             <td>@user.UserName</td>
-            
+
+           
             <td>
-                @if(string.IsNullOrEmpty(user.rolesNames))
+                @if (string.IsNullOrEmpty(user.rolesNames))
                 {
                     <a class="text-class" asp-action="AddRole" asp-route-id="@user.Id">+ Add role</a>
                 } else

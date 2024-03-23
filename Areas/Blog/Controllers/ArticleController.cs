@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using WebBlog.Areas.Identity.Data;
 using WebBlog.Data;
 using WebBlog.Models;
 
@@ -16,11 +18,14 @@ namespace WebBlog.Areas.Blog.Controllers
     {
         private readonly WebBlogDbContext _context;
 
+        private readonly UserManager<AppUser> _userManager;
+
         public IList<ArticleModel> Article { get; set; }
 
-        public ArticleController(WebBlogDbContext context)
+        public ArticleController(WebBlogDbContext context, UserManager<AppUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
 
